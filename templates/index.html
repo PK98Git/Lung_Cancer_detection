@@ -1,0 +1,160 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <title>Lung Cancer Detection</title>
+  <style>
+    /*just bg and body style*/
+    body {
+      margin: 40px;
+      background-color: #808080;
+      background-image: linear-gradient(315deg, #2193b0 25%, #6dd5ed 85%);
+    }
+
+    .container {
+      border-radius: 5px;
+      text-align: center;
+    }
+
+    .btn-container {
+      background: white;
+      box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
+      border-radius: 5px;
+      padding: 10px;
+    }
+
+    .head {
+      font-weight: bolder;
+    }
+
+    .btn-primary {
+      border-color: #ff33f !important;
+      color: #ffffff;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+      background-color: #de5499 !important;
+      border-color: #de5499 !important;
+      padding: 5px;
+    }
+
+    label {
+      width: 50%;
+    }
+
+    #predict {
+      display: none;
+    }
+
+    .form-group {
+      padding: 2px;
+    }
+  </style>
+  <!--Font Awesome-->
+  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h1 class="head">Lung Cancer Detection</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="btn-container">
+
+          <!-- Main Input For Receiving Query to our ML -->
+          <form action="{{ url_for('predict')}}" method="POST" class="form-inline">
+            <div class="row">
+              <div class="col-md-6">
+                <img class="image" src="{{url_for('static', filename='lungs.jpg')}}" width="100%" height="100%" />
+              </div>
+              <div class="col-md-6">
+                <div class="container">
+                  <h4>Enter patient Details</h4>
+                  <div class="form-group">
+                    <label for="gender ">Gender</label>
+                    <input type="text" class="form-control" name="gender" required="required">
+                  </div>
+                  <div class="form-group">
+                    <label for="age">Age </label>
+                    <input type="text" class="form-control" name="age" required="required">
+                  </div>
+                  <div class="form-group">
+                    <label for="smoking ">Smoking </label>
+                    <input type="text" class="form-control" name="smoking" required="required">
+                  </div>
+                  <div class="form-group">
+                    <label for="yellow_fingers">Yellow Fingers</label>
+                    <input type="text" class="form-control" name="yellow_fingers" required="required">
+                  </div>
+                  <div class="form-group">
+                    <label for="anxiety">Anxiety</label>
+                    <input type="text" class="form-control" name="anxiety" required="required" />
+                  </div>
+                  <div class="form-group">
+                    <label for="peer_pressure">Peer Pressure</label>
+                    <input type="text" class="form-control" name="peer_pressure" required="required" />
+                  </div>
+                  <div class="form-group">
+                    <label for="chronic_disease">Chronic Disease</label>
+                    <input type="text" class="form-control" name="chronic_disease" required="required" />
+                  </div>
+                  <div class="form-group">
+                    <label for="fatigue">Fatigue</label>
+                    <input type="text" class="form-control" name="fatigue" required="required" />
+                  </div>
+                  <div class="form-group">
+                    <label for="allergy">Allergy</label>
+                    <input type="text" class="form-control" name="allergy" required="required" />
+                  </div>
+                  <div class="form-group">
+                    <label for="wheezing">Wheezing</label>
+                    <input type="text" class="form-control" name="wheezing" required="required" />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="alcohol_consiuming">Alcohol consuming</label>
+                    <input type="text" class="form-control" name="alcohol_consiuming" required="required" />
+                  </div>
+                   <div class="form-group">
+                    <label for="coughing">Coughing</label>
+                    <input type="text" class="form-control" name="coughing" required="required" />
+                  </div>
+                   <div class="form-group">
+                    <label for="shortness_of_breath">Shortness of breath </label>
+                    <input type="text" class="form-control" name="shortness_of_breath" required="required" />
+                  </div>
+                   <div class="form-group">
+                    <label for="swallowing difficulty">Swallowing difficulty </label>
+                    <input type="text" class="form-control" name="swallowing difficulty" required="required" />
+                  </div>
+                  <div class="form-group">
+                    <label for="chest_pain">Chest Pain </label>
+                    <input type="text" class="form-control" name="chest_pain" required="required" />
+                  </div>
+                   
+                  <button type="submit" class="btn btn-primary btn-lg">Predict Cancer</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        <br />
+        <center>
+          <h1 style="background:#13F3CB">{{prediction_text}}</h1>
+        </center>
+        <br />
+</body>
+
+</html>
